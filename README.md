@@ -16,14 +16,9 @@ Usage examples
 * This will show the usage help:
     wefunk_dl_track.py --help
 
-* This will download "Let It Show" from Moka Only & Chief:
+This will download "Let It Show" from Moka Only & Chief:
 
     wefunk_dl_track.py http://www.wefunkradio.com/show/2013-03-15///play_bg
-
-Query all interfaces except the loopback interface:
-
-    check_iftraffic_nrpe.py -x lo
-
 
 
 Author
