@@ -20,6 +20,11 @@ Usage examples
 
     wefunk_dl_track.py http://www.wefunkradio.com/show/2013-03-15///play_bg
 
+Query all interfaces except the loopback interface:
+
+    check_iftraffic_nrpe.py -x lo
+
+
 
 Author
 ------
