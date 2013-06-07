@@ -13,10 +13,11 @@ Prerequisites
 Usage examples
 --------------
 
-This will show the usage help:
+* This will show the usage help:
     wefunk_dl_track.py --help
 
-This will download "Let It Show" from Moka Only & Chief:
+* This will download "Let It Show" from Moka Only & Chief:
+
     wefunk_dl_track.py http://www.wefunkradio.com/show/2013-03-15///play_bg
 
 
