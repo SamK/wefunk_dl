@@ -25,4 +25,4 @@ This will download "Let It Show" from Moka Only & Chief:
 Author
 ------
 
-Samuel Krieg <my_first_name.my_last_name at gmail dot com>
+Samuel Krieg &lt;my_first_name dot my_last_name at gmail dot com&gt;
