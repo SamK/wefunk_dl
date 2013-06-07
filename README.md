@@ -13,7 +13,7 @@ Prerequisites
 Usage examples
 --------------
 
-* This will show the usage help:
+This will show the usage help:
     wefunk_dl_track.py --help
 
 This will download "Let It Show" from Moka Only & Chief:
