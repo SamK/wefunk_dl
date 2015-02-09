@@ -5,6 +5,7 @@ from HTMLParser import HTMLParser
 import urllib2
 import urlparse
 import argparse
+import logging
 
 
 __version__ = '0.6'
@@ -146,6 +147,7 @@ def parse_arguments():
         epilog='Website: https://github.com/samyboy/wefunk_dl_track'
     )
 
+    parser.add_argument('-v', '--verbose', action='append_const', const=1)
     parser.add_argument('-V', '--version', action='version',
                         help="shows program version", version=version_string)
     parser.add_argument('url', nargs=1, help='The track\'s URL')
@@ -160,12 +162,30 @@ def save_name(keep_name, track):
     extension = url[url.rindex("."):]
     return track['artist'] + " - " + track['title'] + extension
 
+def create_logger(verbose_level):
+    """ http://inventwithpython.com/blog/2012/04/06/stop-using-print-for-debugging-a-5-minute-quickstart-guide-to-pythons-logging-module/
+    """
+    logging.basicConfig(level=logging.WARNING, format='%(levelname)s: %(message)s')
+    logger = logging.getLogger()
+    if verbose_level > 1:
+        #logger.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+        logger.setLevel(logging.DEBUG)
+    if verbose_level == 1:
+        logger.setLevel(logging.INFO)
+    return logger
+
+
 if __name__=="__main__":
 
     args = parse_arguments()
 
     url = args.url[0]
     keep_name = args.original
+
+    # manage verbose stuff
+    verbose_level = 0 if args.verbose is None else sum(args.verbose)
+    logger = create_logger(verbose_level)
+    logger.debug('Debug mode is enabled because verbose level is {}'.format(verbose_level))
 
     # main program
     try:
