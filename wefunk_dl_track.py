@@ -147,7 +147,8 @@ def parse_arguments():
         epilog='Website: https://github.com/samyboy/wefunk_dl_track'
     )
 
-    parser.add_argument('-v', '--verbose', action='append_const', const=1)
+    parser.add_argument('-v', '--verbose', action='append_const', const=1,
+                        help='Verbose mode. -vv enables debug.')
     parser.add_argument('-V', '--version', action='version',
                         help="shows program version", version=version_string)
     parser.add_argument('url', nargs=1, help='The track\'s URL')
@@ -185,7 +186,6 @@ if __name__=="__main__":
     # manage verbose stuff
     verbose_level = 0 if args.verbose is None else sum(args.verbose)
     logger = create_logger(verbose_level)
-    logger.debug('Debug mode is enabled because verbose level is {}'.format(verbose_level))
 
     # main program
     try:
