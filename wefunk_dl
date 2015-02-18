@@ -1,4 +1,6 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+""" Download a WeFunk show
+"""
 
 import sys
 import re
@@ -9,25 +11,31 @@ import argparse
 import logging
 
 
-__version__ = '0.6'
+__version__ = '1.0'
 __author__ = 'Sam'
 
-class FunkError( Exception ): pass
+
+class FunkError(Exception):
+    """ This error happens when the FUNK makes an error
+    """
+    pass
+
 
 def geturl(url):
+    """ Return the content of a url
+    """
     logger.debug('HTTP GET {}'.format(url))
     # Get a file-like object for the Python Web site's home page.
     f = urllib2.urlopen(url)
     # Read from the object, storing the page's contents in 's'.
     s = f.read()
-    info = f.info()
     code = f.getcode()
     f.close()
-    print info
     logger.debug('Return code: {}'.format(code))
     return s
 
-def download_media(url, save_as = False):
+
+def download_media(url, save_as=False):
     media_info = dict()
     file_name = url.split('/')[-1]
     if not save_as:
@@ -47,15 +55,11 @@ def download_media(url, save_as = False):
         f.write(buffer)
     f.close()
 
-    media_info['size']    = file_size
-    media_info['url']     = url
+    media_info['size'] = file_size
+    media_info['url'] = url
     media_info['save_as'] = save_as
-    media_info['http']    = u.getcode()
+    media_info['http'] = u.getcode()
     return media_info
-
-
-
-
 
 
 class ShowParser(HTMLParser):
@@ -63,7 +67,6 @@ class ShowParser(HTMLParser):
     def __init__(self):
         HTMLParser.__init__(self)
         self.show_name = None
-
 
     def handle_starttag(self, tag, attrs):
         if tag == 'a':
@@ -103,9 +106,8 @@ def parse_arguments():
     global __version__
 
     version_string = "%(prog)s version %(version)s by %(author)s" % \
-                     {"prog": "%(prog)s", "version": __version__, \
+                     {"prog": "%(prog)s", "version": __version__,
                      "author": __author__}
-
 
     parser = MyParser(
         description='Download a track on the WeFunk website: \
@@ -118,7 +120,6 @@ def parse_arguments():
     parser.add_argument('-V', '--version', action='version',
                         help="shows program version", version=version_string)
     parser.add_argument('plid', nargs=1, help='The track or show ID')
-    parser.add_argument('--original', '--keep-name', '-o', help='Use original filename',action='store_true')
 
     return parser.parse_args()
 
@@ -126,7 +127,8 @@ def parse_arguments():
 def create_logger(verbose_level):
     """ http://inventwithpython.com/blog/2012/04/06/stop-using-print-for-debugging-a-5-minute-quickstart-guide-to-pythons-logging-module/
     """
-    logging.basicConfig(level=logging.WARNING, format='%(levelname)s: %(message)s')
+    logging.basicConfig(level=logging.WARNING,
+                        format='%(levelname)s: %(message)s')
     logger = logging.getLogger()
     if verbose_level > 1:
         logger.setLevel(logging.DEBUG)
@@ -134,7 +136,7 @@ def create_logger(verbose_level):
         logger.setLevel(logging.INFO)
     return logger
 
-if __name__=="__main__":
+if __name__ == "__main__":
 
     args = parse_arguments()
 
@@ -151,14 +153,13 @@ if __name__=="__main__":
     if '_' in plid:
         show_id = plid.split("_")[0]
         track_number = plid.split("_")[1]
-        logger.debug('Trying to find track {} of show {}'.format(track_number, show_id))
         track = WeFunkTrack(plid)
         print track.__dict__
     else:
         show_id = plid
         logger.debug('Trying to download entire show {}'.format(show_id))
         show = WeFunkShow(show_id)
-        logger.debug('show file name is {}'. format(show.filename ))
+        logger.debug('show file name is {}'.format(show.filename))
 
     shows_location = 'http://wefunk.xcrit.com/partial.php?file='
     media_location = shows_location + show.filename
