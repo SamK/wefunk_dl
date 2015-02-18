@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import sys
+import re
 from HTMLParser import HTMLParser
 import urllib2
 import urlparse
@@ -14,11 +15,16 @@ __author__ = 'Sam'
 class FunkError( Exception ): pass
 
 def geturl(url):
+    logger.debug('HTTP GET {}'.format(url))
     # Get a file-like object for the Python Web site's home page.
     f = urllib2.urlopen(url)
     # Read from the object, storing the page's contents in 's'.
     s = f.read()
+    info = f.info()
+    code = f.getcode()
     f.close()
+    print info
+    logger.debug('Return code: {}'.format(code))
     return s
 
 def download_media(url, save_as = False):
@@ -47,81 +53,41 @@ def download_media(url, save_as = False):
     media_info['http']    = u.getcode()
     return media_info
 
-class TrackList(HTMLParser):
+
+
+
+
+
+class ShowParser(HTMLParser):
 
     def __init__(self):
         HTMLParser.__init__(self)
-        self.links = []
-        self.playlist = False
-        self.track_id = track_id
+        self.show_name = None
+
 
     def handle_starttag(self, tag, attrs):
-        if tag == 'ul':
-            if 'id' in dict(attrs) and dict(attrs)['id'] == 'playlist':
-                self.playlist = True
-        if self.playlist and tag == 'a':
+        if tag == 'a':
             if 'href' in dict(attrs):
                 link = dict(attrs)['href']
-                if link.startswith('/explore'):
-                    self.links.append(link)
-
-class TrackData(HTMLParser):
-    data = dict()
-    def handle_starttag(self, tag, attrs):
-        if tag == 'meta':
-            if 'property' in dict(attrs) and 'content' in dict(attrs):
-                self.data[dict(attrs)['property']] = dict(attrs)['content']
+                if link.startswith('/playlaunch/WeFunk_Show'):
+                    self.show_name = link.replace('/playlaunch/', '')
 
 
-def track_id(url):
-    return url[url.rindex("/")+1:]
+class WeFunkShow():
 
-def wefunk_track_info(url):
+    def __init__(self, show_id):
+        logger.debug("Creating new WeFunk show number {}".format(show_id))
+        self.name = None
+        self.url = 'http://www.wefunkradio.com/show/{}'.format(show_id)
+        self.show_id = show_id
+        self.fetch_data()
 
-    # step 0: get current host
-    o = urlparse.urlsplit(url)
-    host = o[0] + '://' + o[1]
-
-    # step 0: get the track code (last 2 chars)
-    track_code = url[-2:]
-
-    # step 1: get trackinfo list
-    html = geturl(url)
-    parser = TrackList()
-    parser.feed(html)
-    trackinfo_links = parser.links
-
-    # find our trackinfo page
-    trackinfo_link = None
-    for link in parser.links:
-        if link.endswith(track_code):
-            trackinfo_link = link
-
-    if not trackinfo_link:
-        raise FunkError("Page %s is not good" % (url))
-        #print >> sys.stderr, "Can't find the track %s on page %s." % (track_code, url)
-
-    # prepend host if link without host
-    l = urlparse.urlsplit(trackinfo_link)
-    if not l[0]:
-        trackinfo_link = urlparse.urljoin(host, trackinfo_link)
-
-    # step 2: get file link from track info page
-    html = geturl(trackinfo_link)
-
-    # step 3: download and parse the html file
-    parser = TrackData()
-    parser.feed(html)
-
-    # step 4: return parser.data
-
-    track = {
-        'url'   : parser.data['og:audio'],
-        'title' : parser.data['og:audio:title'],
-        'artist': parser.data['og:audio:artist']
-    }
-
-    return track
+    def fetch_data(self):
+        logger.debug('Getting URL {}'.format(self.url))
+        html = geturl(self.url)
+        parser = ShowParser()
+        parser.feed(html)
+        self.filename = parser.show_name + '.mp3'
 
 
 class MyParser(argparse.ArgumentParser):
@@ -151,17 +117,11 @@ def parse_arguments():
                         help='Verbose mode. -vv enables debug.')
     parser.add_argument('-V', '--version', action='version',
                         help="shows program version", version=version_string)
-    parser.add_argument('url', nargs=1, help='The track\'s URL')
+    parser.add_argument('plid', nargs=1, help='The track or show ID')
     parser.add_argument('--original', '--keep-name', '-o', help='Use original filename',action='store_true')
 
     return parser.parse_args()
 
-def save_name(keep_name, track):
-    if keep_name:
-        return None
-    url=track['url']
-    extension = url[url.rindex("."):]
-    return track['artist'] + " - " + track['title'] + extension
 
 def create_logger(verbose_level):
     """ http://inventwithpython.com/blog/2012/04/06/stop-using-print-for-debugging-a-5-minute-quickstart-guide-to-pythons-logging-module/
@@ -169,18 +129,15 @@ def create_logger(verbose_level):
     logging.basicConfig(level=logging.WARNING, format='%(levelname)s: %(message)s')
     logger = logging.getLogger()
     if verbose_level > 1:
-        #logger.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
         logger.setLevel(logging.DEBUG)
     if verbose_level == 1:
         logger.setLevel(logging.INFO)
     return logger
 
-
 if __name__=="__main__":
 
     args = parse_arguments()
 
-    url = args.url[0]
     keep_name = args.original
 
     # manage verbose stuff
@@ -188,10 +145,25 @@ if __name__=="__main__":
     logger = create_logger(verbose_level)
 
     # main program
+    logger.debug("wanted data: {}".format(args.plid))
+    plid = args.plid[0]
+
+    if '_' in plid:
+        show_id = plid.split("_")[0]
+        track_number = plid.split("_")[1]
+        logger.debug('Trying to find track {} of show {}'.format(track_number, show_id))
+        track = WeFunkTrack(plid)
+        print track.__dict__
+    else:
+        show_id = plid
+        logger.debug('Trying to download entire show {}'.format(show_id))
+        show = WeFunkShow(show_id)
+        logger.debug('show file name is {}'. format(show.filename ))
+
+    shows_location = 'http://wefunk.xcrit.com/partial.php?file='
+    media_location = shows_location + show.filename
     try:
-        track_info = wefunk_track_info(url)
-        filename = save_name(keep_name, track_info)
-        download_result = download_media(track_info['url'], filename)
+        download_result = download_media(media_location, show.filename)
     except FunkError as e:
         print >> sys.stderr, "Error: %s" % e
         sys.exit(1)
