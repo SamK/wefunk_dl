@@ -57,7 +57,7 @@ def download_media(url, save_as=False):
     media_info['size'] = file_size
     media_info['url'] = url
     media_info['save_as'] = save_as
-    media_info['http'] = u.getcode()
+    media_info['http'] = request_handler.getcode()
     return media_info
 
 
