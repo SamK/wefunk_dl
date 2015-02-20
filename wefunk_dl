@@ -179,6 +179,5 @@ if __name__ == "__main__":
     verbose = 0 if arguments.verbose is None else sum(arguments.verbose)
     logger = create_logger(verbose)
     main()
-    sys.exit()
 
 ### EOF ###
