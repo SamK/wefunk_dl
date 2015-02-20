@@ -79,7 +79,7 @@ class ShowParser(HTMLParser): # pylint: disable=R0904
                     self.show_name = link.replace('/playlaunch/', '')
 
 
-class WeFunkShow(): # pylint: disable=R0903
+class WeFunkShow(object): # pylint: disable=R0903
     """ This is a WeFunk show
     """
 
