@@ -39,6 +39,7 @@ def download_media(url, save_as=False):
     """ Download a big file from the "url" and save it as "save_as".
         If "save_as" is not provided, save as the original file.
     """
+    LOG.debug('Starting to download "{}".'.format(url))
     media_info = dict()
     file_name = url.split('/')[-1]
     if not save_as:
@@ -83,12 +84,15 @@ class WeFunkShow(): # pylint: disable=R0903
     """ This is a WeFunk show
     """
 
+    website = 'http://www.wefunkradio.com'
+
     def __init__(self, show_id):
         LOG.debug("Creating new WeFunk show number {}".format(show_id))
         self.name = None
         self.filename = ''
         self.show_id = show_id
-        self.url = 'http://www.wefunkradio.com/show/{}'.format(show_id)
+        self.url = '{website}/show/{show_id}'. \
+                   format(website=self.website, show_id=show_id)
         self.fetch_data()
 
     def fetch_data(self):
