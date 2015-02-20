@@ -57,7 +57,7 @@ def download_media(url, save_as=False):
     media_info['size'] = file_size
     media_info['url'] = url
     media_info['save_as'] = save_as
-    media_info['http'] = u.getcode()
+    media_info['http'] = request_handler.getcode()
     return media_info
 
 
@@ -92,7 +92,7 @@ class WeFunkShow():
         """ Get the available informations from the show on the wefunk website
         """
         logger.debug('Getting URL {}'.format(self.url))
-        html = geturl(self.url)
+        html = geturl(self.url).decode('utf-8')
         parser = ShowParser()
         parser.feed(html)
         self.filename = parser.show_name + '.mp3'
