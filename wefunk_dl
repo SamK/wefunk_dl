@@ -99,7 +99,7 @@ class WeFunkShow(): # pylint: disable=R0903
     def fetch_data(self):
         """ Get the available informations from the show on the wefunk website
         """
-        LOG.debug('Getting URL {}'.format(self.url))
+        LOG.debug('Getting html info from {}'.format(self.url))
         html = geturl(self.url).decode('utf-8')
         parser = ShowParser()
         parser.feed(html)
