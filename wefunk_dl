@@ -13,7 +13,6 @@ import logging
 __version__ = '1.0'
 __author__ = 'Sam'
 
-SHOWS_LOCATION = 'http://wefunk.xcrit.com/partial.php?file='
 
 class FunkError(Exception):
     """ This error happens when the FUNK makes an error
@@ -86,10 +85,12 @@ class WeFunkShow(): # pylint: disable=R0903
 
     website = 'http://www.wefunkradio.com'
     file_extension = 'mp3'
+    shows_storage = 'http://wefunk.xcrit.com/partial.php?file='
 
     def __init__(self, show_id):
         LOG.debug("Creating new WeFunk show number {}".format(show_id))
         self.name = None
+        self.location = None
         self.filename = ''
         self.show_id = show_id
         self.url = '{website}/show/{show_id}'. \
@@ -108,6 +109,7 @@ class WeFunkShow(): # pylint: disable=R0903
             # GTFO of here.
             raise FunkError('Cannot find show "{}".'.format(self.show_id))
         self.filename = '{}.{}'.format(parser.show_name, self.file_extension)
+        self.location = '{}{}'.format(self.shows_storage, self.filename)
 
 
 class MyParser(argparse.ArgumentParser):
@@ -164,9 +166,8 @@ def download_show(show_id):
     except FunkError as error:
         print >> sys.stderr, "Error: %s" % error
         sys.exit(1)
-    media_location = SHOWS_LOCATION + show.filename
 
-    download_media(media_location, show.filename)
+    download_media(show.location)
     LOG.info('Show saved as "{}"'.format(show.filename))
 
 #def download_track(plid):
