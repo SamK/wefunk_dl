@@ -168,15 +168,15 @@ def download_show(show_id):
 def main():
     """ The so-called "main" function
     """
-    LOG.debug("wanted data: {}".format(arguments.plid))
-    show_id = arguments.plid[0]
+    LOG.debug("wanted data: {}".format(ARGUMENTS.plid))
+    show_id = ARGUMENTS.plid[0]
     download_show(show_id)
 
 
 if __name__ == "__main__":
-    arguments = parse_arguments()
+    ARGUMENTS = parse_arguments()
     # manage verbose stuff
-    verbose = 0 if arguments.verbose is None else sum(arguments.verbose)
+    verbose = 0 if ARGUMENTS.verbose is None else sum(ARGUMENTS.verbose)
     LOG = create_logger(verbose)
     main()
 
