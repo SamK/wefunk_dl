@@ -23,14 +23,14 @@ class FunkError(Exception):
 def geturl(url):
     """ Return the content of a url
     """
-    logger.debug('HTTP GET {}'.format(url))
+    LOG.debug('HTTP GET {}'.format(url))
     # Get a file-like object for the Python Web site's home page.
     request_handler = urllib2.urlopen(url)
     # Read from the object, storing the page's contents in 's'.
     url_content = request_handler.read()
     return_code = request_handler.getcode()
     request_handler.close()
-    logger.debug('Return code: {}'.format(return_code))
+    LOG.debug('Return code: {}'.format(return_code))
     return url_content
 
 
@@ -83,7 +83,7 @@ class WeFunkShow(): # pylint: disable=R0903
     """
 
     def __init__(self, show_id):
-        logger.debug("Creating new WeFunk show number {}".format(show_id))
+        LOG.debug("Creating new WeFunk show number {}".format(show_id))
         self.name = None
         self.filename = ''
         self.show_id = show_id
@@ -93,7 +93,7 @@ class WeFunkShow(): # pylint: disable=R0903
     def fetch_data(self):
         """ Get the available informations from the show on the wefunk website
         """
-        logger.debug('Getting URL {}'.format(self.url))
+        LOG.debug('Getting URL {}'.format(self.url))
         html = geturl(self.url).decode('utf-8')
         parser = ShowParser()
         parser.feed(html)
@@ -138,17 +138,17 @@ def create_logger(verbose_level):
     """
     logging.basicConfig(level=logging.WARNING,
                         format='%(levelname)s: %(message)s')
-    _logger = logging.getLogger()
+    logger = logging.getLogger()
     if verbose_level > 1:
-        _logger.setLevel(logging.DEBUG)
+        logger.setLevel(logging.DEBUG)
     if verbose_level == 1:
-        _logger.setLevel(logging.INFO)
-    return _logger
+        logger.setLevel(logging.INFO)
+    return logger
 
 def download_show(show_id):
     """ download (or try to) download a show based on its ID
     """
-    logger.info('Trying to download show "{}"'.format(show_id))
+    LOG.info('Trying to download show "{}"'.format(show_id))
     show = WeFunkShow(show_id)
     shows_location = 'http://wefunk.xcrit.com/partial.php?file='
     media_location = shows_location + show.filename
@@ -158,7 +158,7 @@ def download_show(show_id):
     except FunkError as error:
         print >> sys.stderr, "Error: %s" % error
         sys.exit(1)
-    logger.info('Show saved as "{}"'.format(show.filename))
+    LOG.info('Show saved as "{}"'.format(show.filename))
 
 #def download_track(plid):
 #    """ Find a way to download a track based on the playlist id
@@ -168,7 +168,7 @@ def download_show(show_id):
 def main():
     """ The so-called "main" function
     """
-    logger.debug("wanted data: {}".format(arguments.plid))
+    LOG.debug("wanted data: {}".format(arguments.plid))
     show_id = arguments.plid[0]
     download_show(show_id)
 
@@ -177,7 +177,7 @@ if __name__ == "__main__":
     arguments = parse_arguments()
     # manage verbose stuff
     verbose = 0 if arguments.verbose is None else sum(arguments.verbose)
-    logger = create_logger(verbose)
+    LOG = create_logger(verbose)
     main()
 
 ### EOF ###
