@@ -61,7 +61,7 @@ def download_media(url, save_as=False):
     return media_info
 
 
-class ShowParser(HTMLParser):
+class ShowParser(HTMLParser): # pylint: disable=R0904
     """ HTML parser for a WeFunk show
     """
 
@@ -77,15 +77,16 @@ class ShowParser(HTMLParser):
                     self.show_name = link.replace('/playlaunch/', '')
 
 
-class WeFunkShow():
+class WeFunkShow(): # pylint: disable=R0903
     """ This is a WeFunk show
     """
 
     def __init__(self, show_id):
         logger.debug("Creating new WeFunk show number {}".format(show_id))
         self.name = None
-        self.url = 'http://www.wefunkradio.com/show/{}'.format(show_id)
+        self.filename = ''
         self.show_id = show_id
+        self.url = 'http://www.wefunkradio.com/show/{}'.format(show_id)
         self.fetch_data()
 
     def fetch_data(self):
@@ -99,6 +100,9 @@ class WeFunkShow():
 
 
 class MyParser(argparse.ArgumentParser):
+    """ Extend argparse: I want an "error()" method that writes the help message
+    """
+
     def error(self, message):
         sys.stderr.write('error: %s\n' % message)
         self.print_help()
@@ -130,24 +134,25 @@ def parse_arguments():
 
 
 def create_logger(verbose_level):
-    """ http://inventwithpython.com/blog/2012/04/06/stop-using-print-for-debugging-a-5-minute-quickstart-guide-to-pythons-logging-module/
+    """ Stop Using "print" for Debugging: A 5 Minute Quickstart Guide to
+        Python’s logging Module
     """
     logging.basicConfig(level=logging.WARNING,
                         format='%(levelname)s: %(message)s')
-    logger = logging.getLogger()
+    _logger = logging.getLogger()
     if verbose_level > 1:
-        logger.setLevel(logging.DEBUG)
+        _logger.setLevel(logging.DEBUG)
     if verbose_level == 1:
-        logger.setLevel(logging.INFO)
-    return logger
+        _logger.setLevel(logging.INFO)
+    return _logger
 
 if __name__ == "__main__":
 
     args = parse_arguments()
 
     # manage verbose stuff
-    verbose_level = 0 if args.verbose is None else sum(args.verbose)
-    logger = create_logger(verbose_level)
+    verbose = 0 if args.verbose is None else sum(args.verbose)
+    logger = create_logger(verbose)
 
     # main program
     logger.debug("wanted data: {}".format(args.plid))
