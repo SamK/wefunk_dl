@@ -11,7 +11,7 @@ import logging
 
 
 __version__ = '1.0'
-__author__ = 'Sam'
+__author__ = ['Sam', 'Cedric']
 
 
 class FunkError(Exception):
