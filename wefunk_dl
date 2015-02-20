@@ -176,8 +176,8 @@ def main():
 if __name__ == "__main__":
     ARGUMENTS = parse_arguments()
     # manage verbose stuff
-    verbose = 0 if ARGUMENTS.verbose is None else sum(ARGUMENTS.verbose)
-    LOG = create_logger(verbose)
+    VERBOSE_LEVEL = 0 if ARGUMENTS.verbose is None else sum(ARGUMENTS.verbose)
+    LOG = create_logger(VERBOSE_LEVEL)
     main()
 
 ### EOF ###
