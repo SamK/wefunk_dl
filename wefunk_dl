@@ -153,7 +153,11 @@ def download_show(show_id):
     """ download (or try to) download a show based on its ID
     """
     LOG.info('Trying to download show "{}"'.format(show_id))
-    show = WeFunkShow(show_id)
+    try:
+        show = WeFunkShow(show_id)
+    except FunkError as error:
+        print >> sys.stderr, "Error: %s" % error
+        sys.exit(1)
     shows_location = 'http://wefunk.xcrit.com/partial.php?file='
     media_location = shows_location + show.filename
 
