@@ -85,6 +85,7 @@ class WeFunkShow(): # pylint: disable=R0903
     """
 
     website = 'http://www.wefunkradio.com'
+    file_extension = 'mp3'
 
     def __init__(self, show_id):
         LOG.debug("Creating new WeFunk show number {}".format(show_id))
@@ -106,7 +107,7 @@ class WeFunkShow(): # pylint: disable=R0903
             # The show does not seem to exist or something went wrong.
             # GTFO of here.
             raise FunkError('Cannot find show "{}".'.format(self.show_id))
-        self.filename = parser.show_name + '.mp3'
+        self.filename = '{}.{}'.format(parser.show_name, self.file_extension)
 
 
 class MyParser(argparse.ArgumentParser):
