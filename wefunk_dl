@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """ Download a WeFunk show
 """
 
@@ -134,7 +135,7 @@ def parse_arguments():
 
 
 def create_logger(verbose_level):
-    """ Stop Using "print" for Debugging: A 5 Minute Quickstart Guide to
+    """ Search Google: Stop Using "print" for Debugging: A 5 Minute Quickstart Guide to
         Python’s logging Module
     """
     logging.basicConfig(level=logging.WARNING,
@@ -146,31 +147,38 @@ def create_logger(verbose_level):
         _logger.setLevel(logging.INFO)
     return _logger
 
-if __name__ == "__main__":
-
-    arguments = parse_arguments()
-
-    # manage verbose stuff
-    verbose = 0 if arguments.verbose is None else sum(arguments.verbose)
-    logger = create_logger(verbose)
-
-    # main program
-    logger.debug("wanted data: {}".format(arguments.plid))
-    plid = arguments.plid[0]
-
-    show_id = plid
-    logger.debug('Trying to download entire show {}'.format(show_id))
+def download_show(show_id):
+    logger.info('Trying to download show "{}"'.format(show_id))
     show = WeFunkShow(show_id)
-    logger.debug('show file name is {}'.format(show.filename))
-
     shows_location = 'http://wefunk.xcrit.com/partial.php?file='
     media_location = shows_location + show.filename
+
     try:
         download_result = download_media(media_location, show.filename)
     except FunkError as e:
         print >> sys.stderr, "Error: %s" % e
         sys.exit(1)
-    print "Saved as", download_result['save_as']
+    logger.info('Show saved as "{}"'.format(show.filename))
+
+def download_track(track_id):
+    """ Find a way to download a track
+    """
+    pass
+
+def main():
+    """ The so-called "main" function
+    """
+    logger.debug("wanted data: {}".format(arguments.plid))
+    show_id = arguments.plid[0]
+    download_show(show_id)
+
+
+if __name__ == "__main__":
+    arguments = parse_arguments()
+    # manage verbose stuff
+    verbose = 0 if arguments.verbose is None else sum(arguments.verbose)
+    logger = create_logger(verbose)
+    main()
     sys.exit()
 
 ### EOF ###
