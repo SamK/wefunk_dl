@@ -126,7 +126,7 @@ def parse_arguments():
 
     version_string = "%(prog)s version %(version)s by %(author)s" % \
                      {"prog": "%(prog)s", "version": __version__,
-                     "author": __author__}
+                      "author": __author__}
 
     parser = MyParser(
         description='Download a track on the WeFunk website: \
