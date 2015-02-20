@@ -148,15 +148,15 @@ def create_logger(verbose_level):
 
 if __name__ == "__main__":
 
-    args = parse_arguments()
+    arguments = parse_arguments()
 
     # manage verbose stuff
-    verbose = 0 if args.verbose is None else sum(args.verbose)
+    verbose = 0 if arguments.verbose is None else sum(arguments.verbose)
     logger = create_logger(verbose)
 
     # main program
-    logger.debug("wanted data: {}".format(args.plid))
-    plid = args.plid[0]
+    logger.debug("wanted data: {}".format(arguments.plid))
+    plid = arguments.plid[0]
 
     show_id = plid
     logger.debug('Trying to download entire show {}'.format(show_id))
