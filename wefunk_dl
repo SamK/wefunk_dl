@@ -112,8 +112,6 @@ class MyParser(argparse.ArgumentParser):
 
 def parse_arguments():
     """Try to parse the command line arguments given by the user"""
-    global __author__
-    global __version__
 
     version_string = "%(prog)s version %(version)s by %(author)s" % \
                      {"prog": "%(prog)s", "version": __version__,
