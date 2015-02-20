@@ -38,7 +38,6 @@ def download_media(url, save_as=False):
     """ Download a big file from the "url" and save it as "save_as".
         If "save_as" is not provided, save as the original file.
     """
-    LOG.debug('Starting to download "{}".'.format(url))
     media_info = dict()
     file_name = url.split('/')[-1]
     if not save_as:
@@ -49,6 +48,7 @@ def download_media(url, save_as=False):
     file_size = int(meta.getheaders("Content-Length")[0])
 
     block_sz = 8192
+    LOG.debug('Starting download of "{}".'.format(url))
     while True:
         buffer_chunk = request_handler.read(block_sz)
         if not buffer_chunk:
@@ -167,7 +167,7 @@ def download_show(show_id):
         print >> sys.stderr, "Error: %s" % error
         sys.exit(1)
 
-    download_media(show.location)
+    download_media(show.location, show.filename)
     LOG.info('Show saved as "{}"'.format(show.filename))
 
 #def download_track(plid):
