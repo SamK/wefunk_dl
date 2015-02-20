@@ -135,8 +135,8 @@ def parse_arguments():
 
 
 def create_logger(verbose_level):
-    """ Search Google: Stop Using "print" for Debugging: A 5 Minute Quickstart Guide to
-        Python’s logging Module
+    """ Search Google: Stop Using "print" for Debugging: A 5 Minute
+        Quickstart Guide to Python’s logging Module
     """
     logging.basicConfig(level=logging.WARNING,
                         format='%(levelname)s: %(message)s')
@@ -148,22 +148,24 @@ def create_logger(verbose_level):
     return _logger
 
 def download_show(show_id):
+    """ download (or try to) download a show based on its ID
+    """
     logger.info('Trying to download show "{}"'.format(show_id))
     show = WeFunkShow(show_id)
     shows_location = 'http://wefunk.xcrit.com/partial.php?file='
     media_location = shows_location + show.filename
 
     try:
-        download_result = download_media(media_location, show.filename)
-    except FunkError as e:
-        print >> sys.stderr, "Error: %s" % e
+        download_media(media_location, show.filename)
+    except FunkError as error:
+        print >> sys.stderr, "Error: %s" % error
         sys.exit(1)
     logger.info('Show saved as "{}"'.format(show.filename))
 
-def download_track(track_id):
-    """ Find a way to download a track
-    """
-    pass
+#def download_track(plid):
+#    """ Find a way to download a track based on the playlist id
+#    """
+#    pass
 
 def main():
     """ The so-called "main" function
