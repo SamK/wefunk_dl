@@ -1,7 +1,7 @@
-wefunk_dl_track
+wefunk_dl
 ===============
 
-Download a track from the WeFunk website: http://www.wefunkradio.com/
+Download a show from the WeFunk website: http://www.wefunkradio.com/
 WeFunk is the best Hip-Hop, Soul and Funk radio on earth.
 
 Prerequisites
@@ -13,13 +13,9 @@ Prerequisites
 Usage examples
 --------------
 
-This will show the usage help:
+This will download the show 800:
 
-    wefunk_dl_track.py --help
-
-This will download "Let It Show" from Moka Only & Chief:
-
-    wefunk_dl_track.py http://www.wefunkradio.com/show/2013-03-15///play_bg
+    ./wefunk_dl 800
 
 
 Author
