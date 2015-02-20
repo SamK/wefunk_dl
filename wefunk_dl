@@ -161,11 +161,7 @@ def download_show(show_id):
     shows_location = 'http://wefunk.xcrit.com/partial.php?file='
     media_location = shows_location + show.filename
 
-    try:
-        download_media(media_location, show.filename)
-    except FunkError as error:
-        print >> sys.stderr, "Error: %s" % error
-        sys.exit(1)
+    download_media(media_location, show.filename)
     LOG.info('Show saved as "{}"'.format(show.filename))
 
 #def download_track(plid):
