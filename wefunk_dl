@@ -107,7 +107,8 @@ class WeFunkShow(): # pylint: disable=R0903
             # The show does not seem to exist or something went wrong.
             # GTFO of here.
             raise FunkError('Cannot find show "{}".'.format(self.show_id))
-        self.location = '{}{}'.format(self.shows_storage, parser.show_name + '.mp3')
+        self.filename = parser.show_name + '.mp3'
+        self.location = '{}{}'.format(self.shows_storage, self.filename)
 
 
 class MyParser(argparse.ArgumentParser):
