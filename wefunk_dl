@@ -75,7 +75,7 @@ class ShowParser(HTMLParser): # pylint: disable=R0904
         if tag == 'a':
             if 'href' in dict(attrs):
                 link = dict(attrs)['href']
-                if link.startswith('/playlaunch/WeFunk_Show'):
+                if link.lower().startswith('/playlaunch/wefunk_show'):
                     self.show_name = link.replace('/playlaunch/', '')
 
 
