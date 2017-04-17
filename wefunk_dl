@@ -23,14 +23,14 @@ class FunkError(Exception):
 def geturl(url):
     """ Return the content of a url
     """
-    LOG.debug('HTTP GET {}'.format(url))
+    LOG.debug('HTTP GET %s', url)
     # Get a file-like object for the Python Web site's home page.
     http_connection = urllib2.urlopen(url)
     # Read from the object, storing the page's contents in 's'.
     url_content = http_connection.read()
     return_code = http_connection.getcode()
     http_connection.close()
-    LOG.debug('Return code: {}'.format(return_code))
+    LOG.debug('Return code: %s', return_code)
     return url_content
 
 
@@ -48,7 +48,7 @@ def download_media(url, save_as=False):
     file_size = int(meta.getheaders("Content-Length")[0])
 
     block_sz = 8192
-    LOG.debug('Starting download of "{}".'.format(url))
+    LOG.debug('Starting download of "%s".', url)
     while True:
         buffer_chunk = http_connection.read(block_sz)
         if not buffer_chunk:
@@ -63,7 +63,7 @@ def download_media(url, save_as=False):
     return media_info
 
 
-class ShowParser(HTMLParser): # pylint: disable=R0904
+class ShowParser(HTMLParser):  # pylint: disable=R0904
     """ HTML parser for a WeFunk show
     """
 
@@ -79,7 +79,7 @@ class ShowParser(HTMLParser): # pylint: disable=R0904
                     self.show_name = link.replace('/playlaunch/', '')
 
 
-class WeFunkShow(object): # pylint: disable=R0903
+class WeFunkShow(object):  # pylint: disable=R0903
     """ This is a WeFunk show
     """
 
@@ -87,7 +87,7 @@ class WeFunkShow(object): # pylint: disable=R0903
     shows_storage = 'http://wefunk.xcrit.com/'
 
     def __init__(self, show_id):
-        LOG.debug("Creating new WeFunk show number {}".format(show_id))
+        LOG.debug('Creating new WeFunk show number %s', show_id)
         self.name = None
         self.location = None
         self.filename = ''
@@ -99,7 +99,7 @@ class WeFunkShow(object): # pylint: disable=R0903
     def fetch_data(self):
         """ Get the available informations from the show on the wefunk website
         """
-        LOG.debug('Getting html info from {}'.format(self.url))
+        LOG.debug('Getting html info from %s', self.url)
         html = geturl(self.url).decode('utf-8')
         parser = ShowParser()
         parser.feed(html)
@@ -156,10 +156,11 @@ def create_logger(verbose_level):
         logger.setLevel(logging.INFO)
     return logger
 
+
 def download_show(show_id):
     """ download (or try to) download a show based on its ID
     """
-    LOG.info('Trying to download show "{}"'.format(show_id))
+    LOG.info('Trying to download show %s.', show_id)
     try:
         show = WeFunkShow(show_id)
     except FunkError as error:
@@ -167,17 +168,13 @@ def download_show(show_id):
         sys.exit(1)
 
     download_media(show.location, show.filename)
-    LOG.info('Show saved as "{}"'.format(show.filename))
+    LOG.info('Show saved as "%s"', show.filename)
 
-#def download_track(plid):
-#    """ Find a way to download a track based on the playlist id
-#    """
-#    pass
 
 def main():
     """ The so-called "main" function
     """
-    LOG.debug("wanted data: {}".format(ARGUMENTS.show))
+    LOG.debug('wanted data: %s', ARGUMENTS.show)
     show_id = ARGUMENTS.show[0]
     download_show(show_id)
 
@@ -188,5 +185,3 @@ if __name__ == "__main__":
     VERBOSE_LEVEL = 0 if ARGUMENTS.verbose is None else sum(ARGUMENTS.verbose)
     LOG = create_logger(VERBOSE_LEVEL)
     main()
-
-### EOF ###
