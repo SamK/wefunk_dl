@@ -22,3 +22,9 @@ Author
 ------
 
 Samuel Krieg &lt;my_first_name dot my_last_name at gmail dot com&gt;
+
+Contributors
+------------
+
+Many Thanks to [Cedric Honnet](https://github.com/honnet)
+
