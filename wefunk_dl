@@ -129,16 +129,16 @@ def parse_arguments():
                       "author": __author__}
 
     parser = MyParser(
-        description='Download a track on the WeFunk website: \
+        description='Download a show on the WeFunk website: \
         The best webradio you could ever find on the Internet.',
-        epilog='Website: https://github.com/samyboy/wefunk_dl_track'
+        epilog='Website: https://github.com/SamK/wefunk_dl'
     )
 
     parser.add_argument('-v', '--verbose', action='append_const', const=1,
                         help='Verbose mode. -vv enables debug.')
     parser.add_argument('-V', '--version', action='version',
                         help="shows program version", version=version_string)
-    parser.add_argument('plid', nargs=1, help='The track or show ID')
+    parser.add_argument('show', nargs=1, help='The show ID')
 
     return parser.parse_args()
 
@@ -177,8 +177,8 @@ def download_show(show_id):
 def main():
     """ The so-called "main" function
     """
-    LOG.debug("wanted data: {}".format(ARGUMENTS.plid))
-    show_id = ARGUMENTS.plid[0]
+    LOG.debug("wanted data: {}".format(ARGUMENTS.show))
+    show_id = ARGUMENTS.show[0]
     download_show(show_id)
 
 
