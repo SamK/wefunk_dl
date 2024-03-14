@@ -41,8 +41,7 @@ def download_media(url, save_as=False):
     file_name = url.split('/')[-1]
     if not save_as:
         save_as = file_name
-    print("Downloading from:")
-    print(url)
+    print(f"Downloading from: {url}")
     with urllib.request.urlopen(url) as http_connection:
         with open(save_as, 'wb') as fhandler:
             meta = http_connection.info()
