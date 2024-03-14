@@ -14,7 +14,7 @@ Usage examples
 
 This will download the show 800:
 
-    ./wefunk_dl 800
+    ./wefunk_dl.py 800
 
 
 Author
