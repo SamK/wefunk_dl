@@ -7,8 +7,7 @@ WeFunk is the best Hip-Hop, Soul and Funk radio on earth.
 Prerequisites
 -------------
 
-* Python 2.x
-* The python-argparse library
+* Python 3
 
 Usage examples
 --------------
