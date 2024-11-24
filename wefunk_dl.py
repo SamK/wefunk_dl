@@ -164,7 +164,12 @@ def download_show(show_id):
         print(f"Error: {error}", file=sys.stderr)
         sys.exit(1)
 
-    download_media(show.location, show.filename)
+    try:
+        download_media(show.location, show.filename)
+    except urllib.error.HTTPError as e:
+        LOG.critical(e)
+        sys.exit(1)
+
     LOG.info('Show saved as "%s"', show.filename)
 
 
