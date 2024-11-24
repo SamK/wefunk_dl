@@ -33,7 +33,7 @@ def geturl(url):
     return url_content
 
 
-def download_media(url, save_as=False):
+def download_media(url, save_as=None):
     """ Download a big file from the "url" and save it as "save_as".
         If "save_as" is not provided, save as the original file.
     """
